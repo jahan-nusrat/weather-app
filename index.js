@@ -1,46 +1,63 @@
-//////////Request////////////
 const key = 'bb84ab8d65cc50ad2aea793168c939c5';
 const cityName = document.querySelector('.city-name p');
 const cardBody = document.querySelector('.card-body');
 const cardImage = document.querySelector('.card-top img');
+const date = document.querySelector('.date');
+const searchForm = document.querySelector('.search-location');
+const cityValue = document.querySelector('.search-location input');
+
 //country data
 const requestCity = (city) => {
-	const baseURL = 'http://api.openweathermap.org/data/2.5/weather';
-	const query = `?q=${city}&appid=${key}`;
-	//make fetch call
-	const fetchCall = fetch(baseURL + query)
-		.then((response) => {
-			return response.json();
-		})
-		.then((data) => {
-			updateWeatherApp(data);
-		})
-		.catch((error) => {
-			console.log(error);
-		});
-	return fetchCall;
+    const baseURL = 'http://api.openweathermap.org/data/2.5/weather';
+    const query = `?q=${city}&appid=${key}`;
+    //make fetch call
+    const fetchCall = fetch(baseURL + query)
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            updateWeatherApp(data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    return fetchCall;
 };
 
+//get and set date
+function findDate() {
+    let getDate = new Date()
+    let getYear = getDate.getFullYear();
+    let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    let getMonth = getDate.getMonth()
+    let getDay = getDate.getDate()
+    let setDate = `${months[getMonth]} ${getDay}, ${getYear}`;
+    return setDate
+}
+
+//kelvin to celsius
 const convertToCelsius = (kelvin) => {
-	const celsius = Math.round(kelvin - 273.15);
-	return celsius;
+    const celsius = Math.round(kelvin - 273.15);
+    return celsius;
 };
 
+//day time or night time
 const isDayTime = (icon) => {
-	if (icon.includes('d')) {
-		return true;
-	}
-	else {
-		return false;
-	}
+    if (icon.includes('d')) {
+        return true;
+    } else {
+        return false;
+    }
 };
 
+//get weather update
 const updateWeatherApp = (city) => {
-	console.log(city);
-	const image = city.weather[0].icon;
-	const iconSrc = `http://openweathermap.org/img/wn/${image}@2x.png`;
-	cityName.textContent = city.name;
-	cardBody.innerHTML = `
+    console.log(city);
+    const image = city.weather[0].icon;
+    const iconSrc = `http://openweathermap.org/img/wn/${image}@2x.png`;
+    cityName.textContent = city.name;
+    cardBody.innerHTML = `
+    <div class="date text-center">${findDate()}</div>
     <div class="card-mid row">
                     <div class="col-8 text-center temp">
                         <span>${convertToCelsius(city.main.temp)}&deg;C</span>
@@ -66,34 +83,34 @@ const updateWeatherApp = (city) => {
                     </div>
                 </div>
     `;
-	if (isDayTime(image)) {
-		cardImage.src = 'img/day_image.svg';
-		if (cityName.classList.contains('text-white')) {
-			cityName.classList.remove('text-white');
-		}
-		else {
-			cityName.classList.add('text-black');
-		}
-	}
-	else {
-		cardImage.src = 'img/night_image.svg';
-		if (cityName.classList.contains('text-black')) {
-			cityName.classList.remove('text-black');
-		}
-		else {
-			cityName.classList.add('text-white');
-		}
-	}
+
+    //change image according to day or night
+    if (isDayTime(image)) {
+        cardImage.src = 'img/day_image.svg';
+        if (cityName.classList.contains('text-white')) {
+            cityName.classList.remove('text-white');
+        } else {
+            cityName.classList.add('text-black');
+        }
+    } else {
+        cardImage.src = 'img/night_image.svg';
+        if (cityName.classList.contains('text-black')) {
+            cityName.classList.remove('text-black');
+        } else {
+            cityName.classList.add('text-white');
+        }
+    }
 };
 
-///////////search//////////
-const searchForm = document.querySelector('.search-location');
-const cityValue = document.querySelector('.search-location input');
+//Search
 searchForm.addEventListener('submit', function (event) {
-	event.preventDefault();
-	const searchCity = cityValue.value.trim();
-	searchForm.reset();
-	requestCity(searchCity);
+    event.preventDefault();
+    const searchCity = cityValue.value.trim();
+    searchForm.reset();
+    requestCity(searchCity);
 });
-//Build Weather App with HTML, CSS, Bootstrap & Modern Javascript
-//https://www.youtube.com/watch?v=QDdn3yrsyCQ
+
+//window on load
+window.addEventListener('load', function () {
+    date.innerHTML = findDate()
+})
