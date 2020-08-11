@@ -6,6 +6,11 @@ const date = document.querySelector('.date');
 const searchForm = document.querySelector('.search-location');
 const cityValue = document.querySelector('.search-location input');
 
+//window on load
+window.addEventListener('load', function () {
+    date.innerHTML = findDate()
+});
+
 //country data
 const requestCity = (city) => {
     const baseURL = 'http://api.openweathermap.org/data/2.5/weather';
@@ -52,7 +57,6 @@ const isDayTime = (icon) => {
 
 //get weather update
 const updateWeatherApp = (city) => {
-    console.log(city);
     const image = city.weather[0].icon;
     const iconSrc = `http://openweathermap.org/img/wn/${image}@2x.png`;
     cityName.textContent = city.name;
@@ -109,8 +113,3 @@ searchForm.addEventListener('submit', function (event) {
     searchForm.reset();
     requestCity(searchCity);
 });
-
-//window on load
-window.addEventListener('load', function () {
-    date.innerHTML = findDate()
-})
