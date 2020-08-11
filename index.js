@@ -1,3 +1,4 @@
+//////////Request////////////
 const key = 'bb84ab8d65cc50ad2aea793168c939c5';
 
 //country data
@@ -14,3 +15,13 @@ const requestCity = (city) => {
     });
     return fetchCall;
 }
+
+///////////search//////////
+const searchForm = document.querySelector('.search-location');
+const cityValue = document.querySelector('.search-location input')
+searchForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    const searchCity = cityValue.value.trim();
+    searchForm.reset()
+    requestCity(searchCity)
+})
