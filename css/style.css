@@ -31,8 +31,13 @@ body {
 }
 
 .city-name p {
-    font-size: 16pt;
-    font-weight: 400;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: -2px 0px 1px #3b3b39;
+}
+
+.date {
+    color: #ff3b3b;
 }
 
 .city-name span {
